@@ -42,11 +42,12 @@ class Directory extends Component {
     }
 
     render() {
-        // title, imageUrl, and id are destructured from the section objects
+        // id needs to be destructured since it's passed to the menuitem as "key". But 
+        // title, imageUrl, size, etc.. can be passed via ...<name>
         return (
             <div className='directory-menu'>
-                { this.state.sections.map(({ title, imageUrl, id, size }) => (
-                    <MenuItem key={id} title={title} imageUrl={imageUrl} size={size} />
+                { this.state.sections.map(({ id, ...otherSectionProps }) => (
+                    <MenuItem key={id} {...otherSectionProps} />
                     )) }
             </div>
         );
