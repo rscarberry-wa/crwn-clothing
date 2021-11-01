@@ -1,10 +1,27 @@
 import { combineReducers } from "redux";
+import { persistReducer } from 'redux-persist';
+// A local storage object.
+import storage from 'redux-persist/lib/storage';
 
 import cartReducer from "./cart/cart.reducer";
 import userReducer from "./user/user.reducer";
+import directoryReducer from "./directory/directory.reducer";
+import shopReducer from "./shop/shop.reducer";
 
-export default combineReducers({
+const persistConfig = {
+    key: 'root',
+    storage,
+    // Only need to persist the cart in local storage, not the user info,
+    // since firebase auth is taking care of user.
+    whitelist: ['cart']
+}
+
+const rootReducer = combineReducers({
     cart: cartReducer, 
-    user: userReducer
+    user: userReducer,
+    directory: directoryReducer,
+    shop: shopReducer
 });
+
+export default persistReducer(persistConfig, rootReducer);
 
