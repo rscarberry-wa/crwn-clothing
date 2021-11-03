@@ -5,7 +5,11 @@ import logger from "redux-logger";
 import rootReducer from "./root-reducer";
 
 // An array
-const middleware = [logger];
+const middleware = [];
+
+if (process.env.NODE_ENV === 'development') {
+    middleware.push(logger);
+}
 
 // Spread the array of middleware
 export const store = createStore(rootReducer, applyMiddleware(...middleware));
