@@ -38,6 +38,9 @@ class App extends React.Component {
       }
     });
 
+    // Temporarily added to insert local data into firebase.
+    //
+    // addCollectionAndDocuments('collections', collectionsArray.map(({title, items}) => ({ title, items })));
   }
 
   componentWillUnmount() {
