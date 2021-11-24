@@ -10,7 +10,6 @@ import CollectionPageContainer from "../collection/collection.container";
 const ShopPage = ({fetchCollectionsStart, match}) => {
 
     useEffect(() => {
-        console.log("useEffect fetchCollectionsStart");
         fetchCollectionsStart();
     }, [fetchCollectionsStart]);
 
