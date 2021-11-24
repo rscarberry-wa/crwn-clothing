@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
 import CustomButton from '../custom-button/custom-button.component';
@@ -8,67 +8,58 @@ import { googleSignInStart, emailSignInStart } from '../../redux/user/user.actio
 
 import { SignInContainer, SignInTitle, ButtonsContainer } from './sign-in.styles';
 
-class SignIn extends React.Component {
+const SignIn = ({ googleSignInStart, emailSignInStart }) => {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: '',
-            password: ''
-        }
-    }
+    const [userCredentials, setUserCredentials] = useState({email: '', password: ''});
 
-    handleSubmit = async event => {
+    const handleSubmit = async event => {
         event.preventDefault();
-        const { emailSignInStart } = this.props;
-        const { email, password } = this.state;
+        const { email, password } = userCredentials;
         emailSignInStart(email, password);
     }
 
-    handleChange = event => {
-        // Destructure out the value and name of the targeted input
+    const handleChange = event => {
         const { value, name } = event.target;
-        this.setState({ [name]: value });
+        setUserCredentials({...userCredentials, [name]: value});
     }
 
-    render () {
-        
-        const { googleSignInStart } = this.props;
+    const { email, password } = userCredentials;
 
-        // the google button is given type="button", because the 
-        // default behavior of a button that's a child of a form is
-        // to be type="submit". But we don't want an onSubmit to be
-        // triggered on that button.
-        return (
-            <SignInContainer>
-                <SignInTitle>I already have an account</SignInTitle>
-                <span>Sign in with your email and password</span>
-                <form onSubmit={this.handleSubmit}>
-                    <FormInput 
-                        name="email" 
-                        label="Email" 
-                        type="email" 
-                        value={this.state.email} 
-                        required 
-                        handleChange={this.handleChange} />
-                    <FormInput 
-                        name="password" 
-                        label="Password" 
-                        type="password" 
-                        value={this.state.password} 
-                        required 
-                        handleChange={this.handleChange} />
-                    <ButtonsContainer>
-                        <CustomButton type="submit">Sign In</CustomButton>
-                        <CustomButton type="button" 
-                            onClick={googleSignInStart} 
-                            isGoogleSignIn>Sign in with Google
-                        </CustomButton>
-                    </ButtonsContainer>
-                </form>
-            </SignInContainer>
-        )
-    }
+    // the google button is given type="button", because the 
+    // default behavior of a button that's a child of a form is
+    // to be type="submit". But we don't want an onSubmit to be
+    // triggered on that button.
+    return (
+        <SignInContainer>
+            <SignInTitle>I already have an account</SignInTitle>
+            <span>Sign in with your email and password</span>
+            <form onSubmit={handleSubmit}>
+                <FormInput 
+                    name="email" 
+                    label="Email" 
+                    type="email" 
+                    value={email} 
+                    required 
+                    handleChange={handleChange} 
+                />
+                <FormInput 
+                    name="password" 
+                    label="Password" 
+                    type="password" 
+                    value={password} 
+                    required 
+                    handleChange={handleChange} 
+                />
+                <ButtonsContainer>
+                    <CustomButton type="submit">Sign In</CustomButton>
+                    <CustomButton type="button" 
+                        onClick={googleSignInStart} 
+                        isGoogleSignIn>Sign in with Google
+                    </CustomButton>
+                </ButtonsContainer>
+            </form>
+        </SignInContainer>
+    )
 }
 
 const mapDispatchToProps = dispatch => ({
