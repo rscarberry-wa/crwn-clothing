@@ -1,9 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import CustomButton from '../custom-button/custom-button.component';
 import FormInput from '../form-input/form-input.component';
 
-import { auth, signInWithGoogle } from '../../firebase/firebase.utils';
+import { googleSignInStart, emailSignInStart } from '../../redux/user/user.actions';
 
 import { SignInContainer, SignInTitle, ButtonsContainer } from './sign-in.styles';
 
@@ -19,15 +20,9 @@ class SignIn extends React.Component {
 
     handleSubmit = async event => {
         event.preventDefault();
-
+        const { emailSignInStart } = this.props;
         const { email, password } = this.state;
-
-        try {
-            await auth.signInWithEmailAndPassword(email, password);
-            this.setState({ email: '', password: ''});
-        } catch (error) {
-            console.log(error);
-        }
+        emailSignInStart(email, password);
     }
 
     handleChange = event => {
@@ -37,6 +32,9 @@ class SignIn extends React.Component {
     }
 
     render () {
+        
+        const { googleSignInStart } = this.props;
+
         // the google button is given type="button", because the 
         // default behavior of a button that's a child of a form is
         // to be type="submit". But we don't want an onSubmit to be
@@ -63,7 +61,7 @@ class SignIn extends React.Component {
                     <ButtonsContainer>
                         <CustomButton type="submit">Sign In</CustomButton>
                         <CustomButton type="button" 
-                            onClick={signInWithGoogle} 
+                            onClick={googleSignInStart} 
                             isGoogleSignIn>Sign in with Google
                         </CustomButton>
                     </ButtonsContainer>
@@ -73,4 +71,9 @@ class SignIn extends React.Component {
     }
 }
 
-export default SignIn;
+const mapDispatchToProps = dispatch => ({
+    googleSignInStart: () => dispatch(googleSignInStart()),
+    emailSignInStart: (email, password) => dispatch(emailSignInStart({ email, password }))
+});
+
+export default connect(null, mapDispatchToProps)(SignIn);
